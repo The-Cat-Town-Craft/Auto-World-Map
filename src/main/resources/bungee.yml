@@ -1,0 +1,5 @@
+name: Auto World Map
+version: ${plugin_version}
+description: ${plugin_description}"
+author: ${plugin_author}
+main: top.catowncraft.autoworldmap.bungee.AutoWorldMap

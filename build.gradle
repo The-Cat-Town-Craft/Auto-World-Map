@@ -1,0 +1,50 @@
+plugins {
+    id("java")
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url('https://repo.papermc.io/repository/maven-public')
+    }
+}
+
+dependencies {
+    compileOnly("io.github.waterfallmc:waterfall-api:1.19-R0.1-SNAPSHOT")
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+group = "${project.maven_group}"
+def ENV = System.getenv()
+String realVersion = "${project.plugin_version}"
+
+realVersion += "." + (ENV.BUILD_NUMBER ? "${ENV.BUILD_NUMBER}" : Integer.MAX_VALUE)
+realVersion += ENV.COMMIT_SHA ? "+${ENV.COMMIT_SHA}" : ""
+switch (ENV.BUILD_TYPE) {
+    case "RELEASE":
+        realVersion += "-stable"
+        break
+    case "BETA":
+        realVersion += "-beta"
+        break
+    default:
+        realVersion += "-dev"
+}
+version = realVersion
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+processResources {
+    filesMatching('bungee.yml') {
+        expand([
+                "plugin_author":      project.plugin_author,
+                "plugin_description": project.plugin_description,
+                "plugin_name":        project.plugin_name,
+                "plugin_version":     version
+        ])
+    }
+}
