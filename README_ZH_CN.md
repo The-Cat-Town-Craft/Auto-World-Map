@@ -2,7 +2,7 @@
 
 [English](./README.md)
 
-当切换服务器自动为 VoxelMap, XaeroMap 切换地图。
+当切换服务器时自动为 VoxelMap, XaeroMap 切换地图。
 
 ## 开发
 
