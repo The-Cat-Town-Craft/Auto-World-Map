@@ -38,6 +38,10 @@ tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
 
+jar {
+    from("LICENSE")
+}
+
 processResources {
     filesMatching('bungee.yml') {
         expand([
