@@ -1,0 +1,24 @@
+dependencies {
+    compileOnly("io.github.waterfallmc:waterfall-api:${project.waterfall_version}")
+    implementation(project(":autoworldmap-common"))
+}
+
+processResources {
+    filesMatching('bungee.yml') {
+        expand([
+                "plugin_author":      project.plugin_author,
+                "plugin_description": project.plugin_description,
+                "plugin_name":        project.plugin_name,
+                "plugin_version":     version
+        ])
+    }
+}
+
+shadowJar {
+    archiveBaseName.set("AutoWorldMap-BungeeCord")
+    destinationDirectory = file('out')
+}
+
+artifacts {
+    archives shadowJar
+}

@@ -1,0 +1,7 @@
+name: ${plugin_name}
+version: ${plugin_version}
+description: ${plugin_description}
+author: ${plugin_author}
+main: top.catowncraft.autoworldmap.AutoWorldMapBungeeCord
+depends:
+  - Protocolize

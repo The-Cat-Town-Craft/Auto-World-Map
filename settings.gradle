@@ -1,0 +1,19 @@
+pluginManagement {
+    plugins {
+        id("java")
+    }
+}
+
+rootProject.name = "AutoWorldMap"
+
+def modules = Arrays.asList(
+        "bungeecord",
+        "common",
+        "velocity"
+)
+
+for (String module : modules) {
+    include(":autoworldmap-$module")
+    def proj = project(":autoworldmap-$module")
+    proj.projectDir = file("$module")
+}

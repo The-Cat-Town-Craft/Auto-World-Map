@@ -4,6 +4,12 @@
 
 Automatic map switching for VoxelMap, XaeroMap when switching servers.
 
+## Dependencies
+
+| Dependency  | Type     | Download                                               |
+|-------------|----------|--------------------------------------------------------|
+| Protocolize | Required | [Github](https://github.com/Exceptionflug/protocolize) |
+
 ## Development
 
 ### Support

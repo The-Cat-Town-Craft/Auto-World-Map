@@ -4,6 +4,12 @@
 
 当切换服务器时自动为 VoxelMap, XaeroMap 切换地图。
 
+## 依赖项
+
+| 依赖          | 类型  | 下载                                                     |
+|-------------|-----|--------------------------------------------------------|
+| Protocolize | 必须  | [Github](https://github.com/Exceptionflug/protocolize) |
+
 ## 开发
 
 ### 支持
