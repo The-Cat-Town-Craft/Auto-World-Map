@@ -5,7 +5,6 @@ import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier;
 import com.velocitypowered.api.proxy.server.ServerInfo;
 import dev.simplix.protocolize.api.listener.PacketReceiveEvent;
-import io.netty.buffer.ByteBuf;
 import top.catowncraft.autoworldmap.AutoWorldMapVelocity;
 import top.catowncraft.autoworldmap.common.SharedConstant;
 import top.catowncraft.autoworldmap.common.event.IClientboundSetDefaultSpawnPositionEvent;
@@ -23,9 +22,7 @@ public class XaeroMapHandler implements IClientboundSetDefaultSpawnPositionEvent
     public void onEvent(PacketReceiveEvent<ClientboundSetDefaultSpawnPositionPacket> packetReceiveEvent) {
         Optional<Player> player = AutoWorldMapVelocity.getServer().getPlayer(packetReceiveEvent.player().uniqueId());
         player.ifPresent(p -> {
-            ByteBuf buf = PacketCreator.xaeroMap(((ServerInfo) packetReceiveEvent.server()).getName());
-            byte[] bytes = buf.array();
-            buf.release();
+            byte[] bytes = PacketCreator.xaeroMap(((ServerInfo) packetReceiveEvent.server()).getName());
             p.sendPluginMessage(XaeroMapHandler.XAERO_MINI_MAP_CHANNEL, bytes);
             p.sendPluginMessage(XaeroMapHandler.XAERO_WORLD_MAP_CHANNEL, bytes);
         });

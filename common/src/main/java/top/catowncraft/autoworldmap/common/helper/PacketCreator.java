@@ -18,13 +18,15 @@ public class PacketCreator {
         return voxelArray;
     }
 
-    public static ByteBuf xaeroMap(String serverName) {
+    public static byte[] xaeroMap(String serverName) {
         byte[] serverNameByte = serverName.getBytes(StandardCharsets.UTF_8);
         CRC32 crc32 = new CRC32();
         crc32.update(serverNameByte, 0, serverNameByte.length);
         ByteBuf buf = Unpooled.buffer();
         buf.writeByte(0);
         buf.writeInt((int) crc32.getValue());
-        return buf;
+        byte[] xaeroArray = buf.array();
+        buf.release();
+        return xaeroArray;
     }
 }
