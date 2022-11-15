@@ -5,12 +5,9 @@ import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.PluginMessageEvent;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import top.catowncraft.autoworldmap.AutoWorldMapVelocity;
 import top.catowncraft.autoworldmap.common.SharedConstant;
-
-import java.nio.charset.StandardCharsets;
+import top.catowncraft.autoworldmap.common.helper.PacketCreator;
 
 @Singleton
 public class VoxelMapHandler {
@@ -25,16 +22,8 @@ public class VoxelMapHandler {
         if (pluginMessageEvent.getSource() instanceof Player && pluginMessageEvent.getIdentifier().equals(VOXEL_CHANNEL)) {
             Player player = (Player) pluginMessageEvent.getSource();
             player.getCurrentServer().ifPresent(
-                    serverConnection -> {
-                        byte[] serverName = serverConnection.getServerInfo().getName().getBytes(StandardCharsets.UTF_8);
-                        ByteBuf buf = Unpooled.buffer();
-                        buf.writeByte(0);
-                        buf.writeByte(serverName.length);
-                        buf.writeBytes(serverName);
-                        byte[] bytes = buf.array();
-                        buf.release();
-                        player.sendPluginMessage(VoxelMapHandler.VOXEL_CHANNEL, bytes);
-                    });
+                    serverConnection -> player.sendPluginMessage(VoxelMapHandler.VOXEL_CHANNEL,
+                            PacketCreator.voxelMap(serverConnection.getServerInfo().getName())));
             pluginMessageEvent.setResult(PluginMessageEvent.ForwardResult.handled());
         }
     }
