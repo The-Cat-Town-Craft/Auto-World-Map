@@ -4,20 +4,6 @@ dependencies {
     implementation(project(":autoworldmap-common"))
 }
 
-blossom {
-    replaceToken("{plugin_id}", project.plugin_id)
-    replaceToken("{plugin_name}", project.plugin_name)
-    replaceToken("{plugin_version}", version)
-    replaceToken("{plugin_url}", project.plugin_url)
-    replaceToken("{plugin_description}", project.plugin_description)
-    replaceToken("{plugin_author}", project.plugin_author.replaceAll(", ", "\", \""))
-}
-
 shadowJar {
     archiveBaseName.set("AutoWorldMap-Velocity")
-    destinationDirectory = file('out')
-}
-
-artifacts {
-    archives shadowJar
 }

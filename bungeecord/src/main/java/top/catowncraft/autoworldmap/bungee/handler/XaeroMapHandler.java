@@ -12,11 +12,13 @@ import top.catowncraft.autoworldmap.common.packet.ClientboundSetDefaultSpawnPosi
 public class XaeroMapHandler implements IClientboundSetDefaultSpawnPositionEvent {
     @Override
     public void onEvent(PacketReceiveEvent<ClientboundSetDefaultSpawnPositionPacket> packetReceiveEvent) {
-        ProxiedPlayer player = AutoWorldMapBungeeCord.getServer().getPlayer(packetReceiveEvent.player().uniqueId());
-        if (player.isConnected()) {
-            byte[] bytes = PacketCreator.xaeroMap(((ServerInfo) packetReceiveEvent.server()).getName());
-            player.sendData(SharedConstant.XAERO_MINI_MAP_CHANNEL, bytes);
-            player.sendData(SharedConstant.XAERO_WORLD_MAP_CHANNEL, bytes);
+        if (SharedConstant.getConfig().isXaeroMapEnable()) {
+            ProxiedPlayer player = AutoWorldMapBungeeCord.getServer().getPlayer(packetReceiveEvent.player().uniqueId());
+            if (player.isConnected()) {
+                byte[] bytes = PacketCreator.xaeroMap(((ServerInfo) packetReceiveEvent.server()).getName());
+                player.sendData(SharedConstant.XAERO_MINI_MAP_CHANNEL, bytes);
+                player.sendData(SharedConstant.XAERO_WORLD_MAP_CHANNEL, bytes);
+            }
         }
     }
 

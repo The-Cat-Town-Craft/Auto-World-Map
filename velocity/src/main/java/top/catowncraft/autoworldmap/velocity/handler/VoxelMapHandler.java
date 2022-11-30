@@ -19,7 +19,8 @@ public class VoxelMapHandler {
 
     @Subscribe
     public void onPluginMessageEvent(PluginMessageEvent pluginMessageEvent) {
-        if (pluginMessageEvent.getSource() instanceof Player && pluginMessageEvent.getIdentifier().equals(VOXEL_CHANNEL)) {
+        if (SharedConstant.getConfig().isVoxelMapEnable() &&
+                pluginMessageEvent.getSource() instanceof Player && pluginMessageEvent.getIdentifier().equals(VOXEL_CHANNEL)) {
             Player player = (Player) pluginMessageEvent.getSource();
             player.getCurrentServer().ifPresent(
                     serverConnection -> player.sendPluginMessage(VoxelMapHandler.VOXEL_CHANNEL,

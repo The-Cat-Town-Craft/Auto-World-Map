@@ -12,16 +12,23 @@ allprojects {
     repositories {
         mavenCentral()
         maven {
-            url("https://repo.papermc.io/repository/maven-public")
+            name("JitPack Maven")
+            url("https://jitpack.io")
         }
         maven {
+            name("Exceptionflug Maven")
             url("https://mvn.exceptionflug.de/repository/exceptionflug-public")
+        }
+        maven {
+            name("PaperMC Maven")
+            url("https://repo.papermc.io/repository/maven-public")
         }
     }
     dependencies {
         annotationProcessor("org.projectlombok:lombok:${project.lombok_version}")
         compileOnly("org.projectlombok:lombok:${project.lombok_version}")
         compileOnly("dev.simplix:protocolize-api:${project.protocolize_version}")
+        implementation("com.github.simplix-softworks:simplixstorage:${project.simplixstorage_version}")
     }
 
     group = project.maven_group
@@ -44,22 +51,42 @@ allprojects {
     version = realVersion
     description = project.plugin_description
 
-    jar {
-        from("LICENSE")
-    }
-
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
     }
+
+    blossom {
+        replaceToken("{plugin_id}", project.plugin_id)
+        replaceToken("{plugin_name}", project.plugin_name)
+        replaceToken("{plugin_version}", version)
+        replaceToken("{plugin_url}", project.plugin_url)
+        replaceToken("{plugin_description}", project.plugin_description)
+        replaceToken("{plugin_author}", project.plugin_author.replaceAll(", ", "\", \""))
+    }
+
+    shadowJar {
+        from("LICENSE")
+
+        dependencies {
+            exclude(dependency("com.esotericsoftware.yamlbeans:yamlbeans:.*"))
+            exclude(dependency("org.jetbrains:annotations:.*"))
+            exclude(dependency("org.json:json:.*"))
+        }
+
+        relocate("de.leonhard.storage", "${project.maven_group}.${project.plugin_id.replaceAll("-", "")}.lib.de.leonhard.storage")
+        // Remove '-all' suffix
+        classifier(null)
+    }
 }
 
-jar {
+shadowJar {
     // Disable cache
     outputs.upToDateWhen { false }
     dependsOn(project.subprojects.collect {
-        it.tasks.jar
+        // Possible solution, it works.
+        it.name == "${project.plugin_id.replaceAll("-", "")}-common" ? it.tasks.jar : it.tasks.shadowJar
     })
 
     doFirst {
@@ -80,6 +107,5 @@ jar {
         }
     }
 
-    from("LICENSE")
     from("build/tmp/merged")
 }

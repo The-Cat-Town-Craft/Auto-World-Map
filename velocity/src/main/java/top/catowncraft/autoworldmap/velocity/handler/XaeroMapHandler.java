@@ -20,12 +20,14 @@ public class XaeroMapHandler implements IClientboundSetDefaultSpawnPositionEvent
 
     @Override
     public void onEvent(PacketReceiveEvent<ClientboundSetDefaultSpawnPositionPacket> packetReceiveEvent) {
-        Optional<Player> player = AutoWorldMapVelocity.getServer().getPlayer(packetReceiveEvent.player().uniqueId());
-        player.ifPresent(p -> {
-            byte[] bytes = PacketCreator.xaeroMap(((ServerInfo) packetReceiveEvent.server()).getName());
-            p.sendPluginMessage(XaeroMapHandler.XAERO_MINI_MAP_CHANNEL, bytes);
-            p.sendPluginMessage(XaeroMapHandler.XAERO_WORLD_MAP_CHANNEL, bytes);
-        });
+        if (SharedConstant.getConfig().isXaeroMapEnable()) {
+            Optional<Player> player = AutoWorldMapVelocity.getServer().getPlayer(packetReceiveEvent.player().uniqueId());
+            player.ifPresent(p -> {
+                byte[] bytes = PacketCreator.xaeroMap(((ServerInfo) packetReceiveEvent.server()).getName());
+                p.sendPluginMessage(XaeroMapHandler.XAERO_MINI_MAP_CHANNEL, bytes);
+                p.sendPluginMessage(XaeroMapHandler.XAERO_WORLD_MAP_CHANNEL, bytes);
+            });
+        }
     }
 
     @Override

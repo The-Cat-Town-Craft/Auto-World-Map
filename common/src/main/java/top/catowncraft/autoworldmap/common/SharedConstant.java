@@ -1,6 +1,7 @@
 package top.catowncraft.autoworldmap.common;
 
 import lombok.Getter;
+import top.catowncraft.autoworldmap.common.config.ConfigManager;
 
 import java.util.logging.Logger;
 
@@ -19,4 +20,7 @@ public class SharedConstant {
 
     @Getter
     private static final Logger logger = Logger.getLogger("AutoWorldMap");
+
+    @Getter
+    private static final ConfigManager config = new ConfigManager();
 }

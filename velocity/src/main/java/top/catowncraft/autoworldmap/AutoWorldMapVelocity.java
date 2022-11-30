@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 @Singleton
 public final class AutoWorldMapVelocity {
     @Getter
-    private static final Logger pluginLogger = Logger.getLogger("AutoWorldMap");
+    private static final Logger pluginLogger = Logger.getLogger("{plugin_name}");
     @Getter
     private static ProxyServer server;
 

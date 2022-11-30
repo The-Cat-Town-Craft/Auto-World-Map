@@ -10,7 +10,8 @@ import top.catowncraft.autoworldmap.common.helper.PacketCreator;
 public class VoxelMapHandler implements Listener {
     @EventHandler
     public void onPluginMessage(PluginMessageEvent event) {
-        if (event.getSender() instanceof ProxiedPlayer && event.getTag().equals(SharedConstant.VOXEL_MAP_CHANNEL)) {
+        if (SharedConstant.getConfig().isVoxelMapEnable() &&
+                event.getSender() instanceof ProxiedPlayer && event.getTag().equals(SharedConstant.VOXEL_MAP_CHANNEL)) {
             ProxiedPlayer player = (ProxiedPlayer) event.getSender();
             player.sendData(SharedConstant.VOXEL_MAP_CHANNEL,
                     PacketCreator.voxelMap(player.getServer().getInfo().getName()));

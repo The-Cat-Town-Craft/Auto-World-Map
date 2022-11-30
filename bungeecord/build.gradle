@@ -16,9 +16,4 @@ processResources {
 
 shadowJar {
     archiveBaseName.set("AutoWorldMap-BungeeCord")
-    destinationDirectory = file('out')
-}
-
-artifacts {
-    archives shadowJar
 }
