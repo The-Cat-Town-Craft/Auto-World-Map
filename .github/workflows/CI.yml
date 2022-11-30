@@ -71,8 +71,8 @@ jobs:
           name: ${{ steps.plugin_name.outputs.value }} ${{ steps.plugin_version.outputs.value }}.${{ github.run_number}}+${{ steps.get_short_sha.outputs.short_sha }}
           path: |
             LICENSE
-            bungeecord/libs/*.jar
-            velocity/libs/*.jar
+            bungeecord/build/libs/*.jar
+            velocity/build/libs/*.jar
             build/libs/*.jar
 
       - name: Create Github Release
@@ -82,8 +82,8 @@ jobs:
           prerelease: true
           files: |
             LICENSE
-            bungeecord/libs/*.jar
-            velocity/libs/*.jar
+            bungeecord/build/libs/*.jar
+            velocity/build/libs/*.jar
             build/libs/*.jar
           name: "[CI#${{ github.run_number}}]${{ steps.plugin_name.outputs.value }} ${{ steps.plugin_version.outputs.value }}.${{ github.run_number}}+${{ steps.get_short_sha.outputs.short_sha }}"
           tag_name: dev-${{ github.run_number }}
@@ -152,8 +152,8 @@ jobs:
           name: ${{ steps.plugin_name.outputs.value }} ${{ steps.plugin_version.outputs.value }}.${{ github.run_number}}+${{ steps.get_short_sha.outputs.short_sha }}
           path: |
             LICENSE
-            bungeecord/libs/*.jar
-            velocity/libs/*.jar
+            bungeecord/build/libs/*.jar
+            velocity/build/libs/*.jar
             build/libs/*.jar
 
       - name: Upload assets to Github Release
@@ -161,8 +161,8 @@ jobs:
         with:
           files: |
             LICENSE
-            bungeecord/libs/*.jar
-            velocity/libs/*.jar
+            bungeecord/build/libs/*.jar
+            velocity/build/libs/*.jar
             build/libs/*.jar
           tag_name: ${{ github.event.ref }}
 
