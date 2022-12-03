@@ -1,4 +1,3 @@
 dependencies {
     compileOnly("io.netty:netty-all:${project.netty_version}")
-    apiElements("io.netty:netty-all:${project.netty_version}")
 }

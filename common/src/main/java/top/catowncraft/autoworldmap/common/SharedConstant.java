@@ -19,6 +19,21 @@ public class SharedConstant {
     public static final String XAERO_MINI_MAP_CHANNEL = XAERO_MINI_MAP_NAMESPACE + ":" + XAERO_MINI_MAP_NAME;
 
     @Getter
+    private static final String pluginAuthor = "{plugin_author_string}";
+    @Getter
+    private static final String pluginDescription = "{plugin_description}";
+    @Getter
+    private static final String pluginID = "{plugin_id}";
+    @Getter
+    private static final String pluginName = "{plugin_name}";
+    @Getter
+    private static final String pluginPermissionRoot = "{plugin_permission_root}";
+    @Getter
+    private static final String pluginUrl = "{plugin_url}";
+    @Getter
+    private static final String pluginVersion = "{plugin_version}";
+
+    @Getter
     private static final Logger logger = Logger.getLogger("AutoWorldMap");
 
     @Getter

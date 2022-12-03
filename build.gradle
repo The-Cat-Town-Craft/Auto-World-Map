@@ -58,12 +58,14 @@ allprojects {
     }
 
     blossom {
+        replaceToken("{plugin_author_list}", project.plugin_author.replaceAll(", ", "\", \""))
+        replaceToken("{plugin_author_string}", project.plugin_author)
+        replaceToken("{plugin_description}", project.plugin_description)
         replaceToken("{plugin_id}", project.plugin_id)
         replaceToken("{plugin_name}", project.plugin_name)
-        replaceToken("{plugin_version}", version)
+        replaceToken("{plugin_permission_root}", project.plugin_id.replaceAll("-", ""))
         replaceToken("{plugin_url}", project.plugin_url)
-        replaceToken("{plugin_description}", project.plugin_description)
-        replaceToken("{plugin_author}", project.plugin_author.replaceAll(", ", "\", \""))
+        replaceToken("{plugin_version}", version)
     }
 
     shadowJar {
@@ -78,6 +80,10 @@ allprojects {
         relocate("de.leonhard.storage", "${project.maven_group}.${project.plugin_id.replaceAll("-", "")}.lib.de.leonhard.storage")
         // Remove '-all' suffix
         classifier(null)
+
+        if (project.name != rootProject.name) {
+            archiveBaseName.set("${rootProject.name}${project.name.replace("${project.plugin_name}".toLowerCase(), "")}")
+        }
     }
 }
 

@@ -3,7 +3,3 @@ dependencies {
     compileOnly("com.velocitypowered:velocity-api:${project.velocity_version}")
     implementation(project(":autoworldmap-common"))
 }
-
-shadowJar {
-    archiveBaseName.set("AutoWorldMap-Velocity")
-}

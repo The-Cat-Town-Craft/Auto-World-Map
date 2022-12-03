@@ -13,7 +13,3 @@ processResources {
         ])
     }
 }
-
-shadowJar {
-    archiveBaseName.set("AutoWorldMap-BungeeCord")
-}

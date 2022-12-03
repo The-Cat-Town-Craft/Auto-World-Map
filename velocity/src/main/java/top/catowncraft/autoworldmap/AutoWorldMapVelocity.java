@@ -13,6 +13,7 @@ import dev.simplix.protocolize.api.Protocolize;
 import lombok.Getter;
 import top.catowncraft.autoworldmap.common.listener.downstream.ClientboundSetDefaultSpawnPositionListener;
 import top.catowncraft.autoworldmap.common.packet.ClientboundSetDefaultSpawnPositionPacket;
+import top.catowncraft.autoworldmap.velocity.command.AutoWorldMapCommandVelocity;
 import top.catowncraft.autoworldmap.velocity.handler.VoxelMapHandler;
 import top.catowncraft.autoworldmap.velocity.handler.XaeroMapHandler;
 
@@ -23,19 +24,17 @@ import java.util.logging.Logger;
         version = "{plugin_version}",
         url = "{plugin_url}",
         description = "{plugin_description}",
-        authors = {"{plugin_author}"},
+        authors = {"{plugin_author_list}"},
         dependencies = @Dependency(id = "protocolize")
 )
 @Singleton
 public final class AutoWorldMapVelocity {
     @Getter
-    private static final Logger pluginLogger = Logger.getLogger("{plugin_name}");
-    @Getter
     private static ProxyServer server;
 
     @Inject
     public AutoWorldMapVelocity(ProxyServer proxyServer, Logger logger) {
-        server = proxyServer;
+        AutoWorldMapVelocity.server = proxyServer;
     }
 
     @Subscribe
@@ -45,5 +44,6 @@ public final class AutoWorldMapVelocity {
         VoxelMapHandler.init();
         AutoWorldMapVelocity.getServer().getEventManager().register(this, new VoxelMapHandler());
         ClientboundSetDefaultSpawnPositionListener.register(new XaeroMapHandler());
+        AutoWorldMapVelocity.getServer().getCommandManager().register("{plugin_id}", new AutoWorldMapCommandVelocity());
     }
 }
