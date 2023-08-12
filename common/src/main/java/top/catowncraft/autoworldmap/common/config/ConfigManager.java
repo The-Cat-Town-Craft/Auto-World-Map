@@ -16,8 +16,8 @@ public class ConfigManager {
     }
 
     public void load() {
-        this.xaeroMapEnable = this.config.getOrSetDefault("packet.voxel_map", true);
-        this.voxelMapEnable = this.config.getOrSetDefault("packet.xaero_map", true);
+        this.voxelMapEnable = this.config.getOrSetDefault("packet.voxel_map", true);
+        this.xaeroMapEnable = this.config.getOrSetDefault("packet.xaero_map", true);
     }
 
     public void reload() {
