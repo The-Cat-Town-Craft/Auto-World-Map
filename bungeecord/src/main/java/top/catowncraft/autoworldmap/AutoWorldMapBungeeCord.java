@@ -28,5 +28,6 @@ public final class AutoWorldMapBungeeCord extends Plugin {
 
     @Override
     public void onDisable() {
+        super.onDisable();
     }
 }

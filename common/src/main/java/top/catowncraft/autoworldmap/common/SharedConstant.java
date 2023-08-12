@@ -3,6 +3,9 @@ package top.catowncraft.autoworldmap.common;
 import lombok.Getter;
 import top.catowncraft.autoworldmap.common.config.ConfigManager;
 
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class SharedConstant {
@@ -32,6 +35,15 @@ public class SharedConstant {
     private static final String pluginUrl = "{plugin_url}";
     @Getter
     private static final String pluginVersion = "{plugin_version}";
+
+    public static final List<String> CONFIG_HEADER = Arrays.asList(
+            " ==================================================",
+            "         Auto World Map configuration file",
+            "",
+            String.format(" Copyright (c) 2020 - %s The Cat Town Craft and ", Calendar.getInstance().get(Calendar.YEAR)),
+            " contributors.",
+            " =================================================="
+    );
 
     @Getter
     private static final Logger logger = Logger.getLogger("AutoWorldMap");
