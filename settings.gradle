@@ -14,6 +14,4 @@ def modules = Arrays.asList(
 
 for (String module : modules) {
     include(":autoworldmap-$module")
-    def proj = project(":autoworldmap-$module")
-    proj.projectDir = file("$module")
 }

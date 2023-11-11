@@ -1,0 +1,21 @@
+import groovy.json.JsonBuilder
+import groovy.json.JsonSlurper
+
+dependencies {
+    annotationProcessor("com.velocitypowered:velocity-api:${project.velocity_version}")
+    compileOnly("com.velocitypowered:velocity-api:${project.velocity_version}")
+    shade(implementation(project(":autoworldmap-common")))
+}
+
+tasks.named("classes") {
+    doLast {
+        File file = file("build/classes/java/main/velocity-plugin.json")
+        JsonSlurper slurper = new JsonSlurper()
+        JsonBuilder builder = new JsonBuilder(slurper.parse(file))
+        builder.content.version = project.version
+        BufferedWriter writer = file.newWriter()
+        writer.append(builder.toString())
+        writer.flush()
+        writer.close()
+    }
+}

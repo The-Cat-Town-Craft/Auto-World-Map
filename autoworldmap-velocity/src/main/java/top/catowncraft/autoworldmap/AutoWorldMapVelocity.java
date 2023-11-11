@@ -19,12 +19,12 @@ import top.catowncraft.autoworldmap.velocity.handler.XaeroMapHandler;
 
 import java.util.logging.Logger;
 
-@Plugin(id = "{plugin_id}",
-        name = "{plugin_name}",
-        version = "{plugin_version}",
-        url = "{plugin_url}",
-        description = "{plugin_description}",
-        authors = {"{plugin_author_list}"},
+@Plugin(id = "auto-world-map",
+        name = "AutoWorldMap",
+        version = "@PLUGIN_VERSION@",
+        url = "https://github.com/The-Cat-Town-Craft/Auto-World-Map",
+        description = "Automatic map switching for VoxelMap, XaeroMap when switching servers.",
+        authors = {"The-Cat-Town-Craft", "Hendrix-Shen"},
         dependencies = @Dependency(id = "protocolize")
 )
 @Singleton

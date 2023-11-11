@@ -22,19 +22,19 @@ public class SharedConstant {
     public static final String XAERO_MINI_MAP_CHANNEL = XAERO_MINI_MAP_NAMESPACE + ":" + XAERO_MINI_MAP_NAME;
 
     @Getter
-    private static final String pluginAuthor = "{plugin_author_string}";
+    private static final String pluginAuthor = "The-Cat-Town-Craft, Hendrix-Shen";
     @Getter
-    private static final String pluginDescription = "{plugin_description}";
+    private static final String pluginDescription = "Automatic map switching for VoxelMap, XaeroMap when switching servers.";
     @Getter
-    private static final String pluginID = "{plugin_id}";
+    private static final String pluginID = "auto-world-map";
     @Getter
-    private static final String pluginName = "{plugin_name}";
+    private static final String pluginName = "AutoWorldMap";
     @Getter
-    private static final String pluginPermissionRoot = "{plugin_permission_root}";
+    private static final String pluginPermissionRoot = "autoworldmap";
     @Getter
-    private static final String pluginUrl = "{plugin_url}";
+    private static final String pluginUrl = "https://github.com/The-Cat-Town-Craft/Auto-World-Map";
     @Getter
-    private static final String pluginVersion = "{plugin_version}";
+    private static final String pluginVersion = "@PLUGIN_VERSION@";
 
     public static final List<String> CONFIG_HEADER = Arrays.asList(
             " ==================================================",

@@ -32,7 +32,7 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('*.gradle', 'gradle.properties', '**/*.accesswidener') }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle-
 
       - name: Get short commit sha
@@ -63,7 +63,7 @@ jobs:
           COMMIT_SHA: ${{ steps.get_short_sha.outputs.short_sha }}
           BUILD_TYPE: "BETA"
           BUILD_NUMBER: ${{ github.run_number }}
-        run: ./gradlew shadowJar
+        run: ./gradlew build
 
       - name: Upload assets to GitHub Action
         uses: actions/upload-artifact@v2
@@ -113,7 +113,7 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('*.gradle', 'gradle.properties', '**/*.accesswidener') }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle-
 
       - name: Get short commit sha
@@ -144,7 +144,7 @@ jobs:
           COMMIT_SHA: ${{ steps.get_short_sha.outputs.short_sha }}
           BUILD_TYPE: "RELEASE"
           BUILD_NUMBER: ${{ github.run_number }}
-        run: ./gradlew shadowJar
+        run: ./gradlew build
 
       - name: Upload assets to GitHub Action
         uses: actions/upload-artifact@v2

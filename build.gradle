@@ -1,34 +1,50 @@
+import org.objectweb.asm.ClassReader
+import org.objectweb.asm.ClassWriter
+import org.objectweb.asm.tree.ClassNode
+import org.objectweb.asm.tree.LdcInsnNode
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     id("java")
-    id("com.github.johnrengelman.shadow").version("7.1.2")
-    id("net.kyori.blossom").version("1.3.1")
+    id("com.github.johnrengelman.shadow").version("8.1.1")
 }
 
 allprojects {
     apply(plugin: "java")
     apply(plugin: "com.github.johnrengelman.shadow")
-    apply(plugin: "net.kyori.blossom")
+
+    configurations {
+        register("shade")
+        register("shadeOnly")
+
+        compileOnly.extendsFrom(shade)
+    }
 
     repositories {
         mavenCentral()
+
         maven {
-            name("JitPack Maven")
+            name("JitPack")
             url("https://jitpack.io")
         }
         maven {
-            name("Exceptionflug Maven")
+            name("Exceptionflug")
             url("https://mvn.exceptionflug.de/repository/exceptionflug-public")
         }
         maven {
-            name("PaperMC Maven")
+            name("PaperMC")
             url("https://repo.papermc.io/repository/maven-public")
         }
     }
+
     dependencies {
         annotationProcessor("org.projectlombok:lombok:${project.lombok_version}")
         compileOnly("org.projectlombok:lombok:${project.lombok_version}")
         compileOnly("dev.simplix:protocolize-api:${project.protocolize_version}")
-        implementation("com.github.simplix-softworks:simplixstorage:${project.simplixstorage_version}")
+        compileOnly("com.github.simplix-softworks:simplixstorage:${project.simplixstorage_version}")
+        shadeOnly("com.github.simplix-softworks:simplixstorage:${project.simplixstorage_version}") {
+            transitive = false
+        }
     }
 
     group = project.maven_group
@@ -48,70 +64,159 @@ allprojects {
             realVersion += "-dev"
     }
 
-    version = realVersion
-    description = project.plugin_description
+    description(project.plugin_description)
 
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-    tasks.withType(JavaCompile).configureEach {
-        options.encoding = "UTF-8"
-    }
-
-    blossom {
-        replaceToken("{plugin_author_list}", project.plugin_author.replaceAll(", ", "\", \""))
-        replaceToken("{plugin_author_string}", project.plugin_author)
-        replaceToken("{plugin_description}", project.plugin_description)
-        replaceToken("{plugin_id}", project.plugin_id)
-        replaceToken("{plugin_name}", project.plugin_name)
-        replaceToken("{plugin_permission_root}", project.plugin_id.replaceAll("-", ""))
-        replaceToken("{plugin_url}", project.plugin_url)
-        replaceToken("{plugin_version}", version)
-    }
-
-    shadowJar {
-        from("LICENSE")
-
-        dependencies {
-            exclude(dependency("com.esotericsoftware.yamlbeans:yamlbeans:.*"))
-            exclude(dependency("org.jetbrains:annotations:.*"))
-            exclude(dependency("org.json:json:.*"))
+    base {
+        if (project.name != rootProject.name) {
+            archivesBaseName("${rootProject.name}${project.name.replace("${project.plugin_name}".toLowerCase(), "")}")
         }
 
-        relocate("de.leonhard.storage", "${project.maven_group}.${project.plugin_id.replaceAll("-", "")}.lib.de.leonhard.storage")
-        // Remove '-all' suffix
-        classifier(null)
+        version(realVersion)
+    }
 
-        if (project.name != rootProject.name) {
-            archiveBaseName.set("${rootProject.name}${project.name.replace("${project.plugin_name}".toLowerCase(), "")}")
+    java {
+        sourceCompatibility(JavaVersion.VERSION_1_8)
+        targetCompatibility(JavaVersion.VERSION_1_8)
+
+        withSourcesJar()
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding("UTF-8")
+    }
+
+    tasks.named("shadowJar") { ShadowJar task ->
+        task.from("LICENSE")
+
+        task.configurations.clear()
+        task.configurations.add(project.configurations.shade)
+        task.configurations.add(project.configurations.shadeOnly)
+
+        task.exclude("META-INF/maven/**/*", "META-INF/*.txt")
+        task.relocate("de.leonhard.storage", "${project.maven_group.replaceAll("-", "")}.lib.de.leonhard.storage")
+
+        // Remove '-all' suffix
+        task.archiveClassifier.set(null)
+    }
+
+    tasks.named("assemble") { task ->
+        task.dependsOn(tasks.shadowJar)
+    }
+
+    Map<Object, Object> replaceTokenMap = new HashMap<>()
+    replaceTokenMap.put("@PLUGIN_VERSION@", project.version)
+    List<Object> replaceTokenFile = new ArrayList<>()
+    replaceTokenFile.add("AutoWorldMapVelocity")
+    replaceTokenFile.add("SharedConstant")
+
+    tasks.named("classes") {
+        doLast {
+            File dir = file("${projectDir}/build/classes/java")
+
+            if (!dir.exists()) {
+                return
+            }
+
+            dir.eachFileRecurse {
+                String path = it.path.replace(dir.path, "")
+
+                if (path.endsWith(".class") && replaceTokenFile.stream().anyMatch { path.contains(it as String) }) {
+                    ClassReader cr = new ClassReader(it.newInputStream().bytes)
+                    ClassNode cn = new ClassNode()
+                    cr.accept(cn, ClassReader.SKIP_FRAMES | ClassReader.SKIP_DEBUG)
+
+                    // ReplaceToken in fields
+                    cn.fields.each {
+                        if (it.desc == "Ljava/lang/String;" && it.value instanceof String) {
+                            String value = it.value as String
+
+                            replaceTokenMap.each {
+                                value = value.replace(it.key as String, it.value as String)
+                            }
+
+                            it.value = value
+                        }
+                    }
+
+                    // ReplaceToken in methods
+                    cn.methods.each {
+                        it.instructions.each {
+                            if (it instanceof LdcInsnNode) {
+                                LdcInsnNode ldc = it as LdcInsnNode
+
+                                if (ldc.cst instanceof String) {
+                                    String value = ldc.cst as String
+
+                                    replaceTokenMap.each {
+                                        value = value.replace(it.key as String, it.value as String)
+                                    }
+
+                                    ldc.cst = value
+                                }
+                            }
+                        }
+                    }
+
+                    // ReplaceToken in class annotations
+                    if (cn.visibleAnnotations != null) {
+                        cn.visibleAnnotations.forEach {
+                            if (it.values != null) {
+                                // Skip keys
+                                for (int i = 1; i < it.values.size(); i += 2) {
+                                    Object value = it.values.get(i)
+
+                                    if (value instanceof String) {
+                                        replaceTokenMap.each {
+                                            value = value.replace(it.key as String, it.value as String)
+                                        }
+
+                                        it.values.set(i, value)
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES)
+                    cn.accept(cw)
+                    new FileOutputStream(it).write(cw.toByteArray())
+                }
+            }
+
+            dir = file("${projectDir}/build/classes/java")
         }
     }
 }
 
-shadowJar {
+tasks.named("shadowJar") { ShadowJar task ->
     // Disable cache
     outputs.upToDateWhen { false }
+
     dependsOn(project.subprojects.collect {
         // Possible solution, it works.
-        it.name == "${project.plugin_id.replaceAll("-", "")}-common" ? it.tasks.jar : it.tasks.shadowJar
+        it.name == "autoworldmap-common" ? it.tasks.jar : it.tasks.shadowJar
     })
 
     doFirst {
         // Clean up legacy files.
         delete fileTree("build/tmp/merged")
+
         copy {
             from {
                 project.subprojects.collect {
-                    "${it.buildDir}/classes/java/main"
+                    "${it.projectDir}/build/classes/java/main"
                 }
             }
+
             from {
                 project.subprojects.collect {
-                    "${it.buildDir}/resources/main"
+                    "${it.projectDir}/build/resources/main"
                 }
             }
+
             into("build/tmp/merged")
         }
     }
 
-    from("build/tmp/merged")
+    task.from("build/tmp/merged")
 }

@@ -1,5 +1,0 @@
-dependencies {
-    annotationProcessor("com.velocitypowered:velocity-api:${project.velocity_version}")
-    compileOnly("com.velocitypowered:velocity-api:${project.velocity_version}")
-    implementation(project(":autoworldmap-common"))
-}
