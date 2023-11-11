@@ -31,9 +31,11 @@ public class ClientboundSetDefaultSpawnPositionPacket extends AbstractPacket {
             AbstractProtocolMapping.rangedIdMapping(MINECRAFT_1_15, MINECRAFT_1_15_2, 0x4E),
             AbstractProtocolMapping.rangedIdMapping(MINECRAFT_1_16, MINECRAFT_1_16_5, 0x42),
             AbstractProtocolMapping.rangedIdMapping(MINECRAFT_1_17, MINECRAFT_1_18_2, 0x4B),
-            AbstractProtocolMapping.rangedIdMapping(MINECRAFT_1_18_2, MINECRAFT_1_19, 0x4A),
+            AbstractProtocolMapping.rangedIdMapping(MINECRAFT_1_19, MINECRAFT_1_19, 0x4A),
             AbstractProtocolMapping.rangedIdMapping(MINECRAFT_1_19_1, MINECRAFT_1_19_2, 0x4D),
-            AbstractProtocolMapping.rangedIdMapping(MINECRAFT_1_19_2, MINECRAFT_1_19_3, 0x4C)
+            AbstractProtocolMapping.rangedIdMapping(MINECRAFT_1_19_3, MINECRAFT_1_19_3, 0x4C),
+            AbstractProtocolMapping.rangedIdMapping(MINECRAFT_1_19_4, MINECRAFT_1_20_1, 0x50),
+            AbstractProtocolMapping.rangedIdMapping(MINECRAFT_1_20_2, MINECRAFT_1_20_2, 0x52)
     );
 
     private BlockPos blockPos;
