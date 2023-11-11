@@ -1,9 +1,3 @@
-pluginManagement {
-    plugins {
-        id("java")
-    }
-}
-
 rootProject.name = "AutoWorldMap"
 
 def modules = Arrays.asList(

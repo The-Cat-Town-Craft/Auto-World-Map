@@ -4,7 +4,7 @@ import groovy.json.JsonSlurper
 dependencies {
     annotationProcessor("com.velocitypowered:velocity-api:${project.velocity_version}")
     compileOnly("com.velocitypowered:velocity-api:${project.velocity_version}")
-    shade(implementation(project(":autoworldmap-common")))
+    shade(project(":autoworldmap-common"))
 }
 
 tasks.named("classes") {

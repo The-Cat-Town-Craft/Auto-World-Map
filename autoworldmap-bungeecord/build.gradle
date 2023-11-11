@@ -1,6 +1,6 @@
 dependencies {
     compileOnly("io.github.waterfallmc:waterfall-api:${project.waterfall_version}")
-    shade(implementation(project(":autoworldmap-common")))
+    shade(project(":autoworldmap-common"))
 }
 
 processResources {

@@ -14,10 +14,11 @@ allprojects {
     apply(plugin: "com.github.johnrengelman.shadow")
 
     configurations {
-        register("shade")
-        register("shadeOnly")
+        register("shade") {
+            compileOnly.extendsFrom(it)
+        }
 
-        compileOnly.extendsFrom(shade)
+        register("shadeOnly")
     }
 
     repositories {
@@ -47,7 +48,7 @@ allprojects {
         }
     }
 
-    group = project.maven_group
+    group(project.maven_group)
     def ENV = System.getenv()
     String realVersion = "${project.plugin_version}"
 
@@ -85,7 +86,12 @@ allprojects {
         options.encoding("UTF-8")
     }
 
+    tasks.named("assemble") { task ->
+        task.dependsOn(tasks.shadowJar)
+    }
+
     tasks.named("shadowJar") { ShadowJar task ->
+        task.dependsOn(jar)
         task.from("LICENSE")
 
         task.configurations.clear()
@@ -97,10 +103,6 @@ allprojects {
 
         // Remove '-all' suffix
         task.archiveClassifier.set(null)
-    }
-
-    tasks.named("assemble") { task ->
-        task.dependsOn(tasks.shadowJar)
     }
 
     Map<Object, Object> replaceTokenMap = new HashMap<>()
@@ -189,9 +191,6 @@ allprojects {
 }
 
 tasks.named("shadowJar") { ShadowJar task ->
-    // Disable cache
-    outputs.upToDateWhen { false }
-
     dependsOn(project.subprojects.collect {
         // Possible solution, it works.
         it.name == "autoworldmap-common" ? it.tasks.jar : it.tasks.shadowJar
